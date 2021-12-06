@@ -1,6 +1,7 @@
 import pygame as py
 import threading
 import time
+import random
 
 class Fortuna:
     def __init__(self, ventana):
@@ -72,14 +73,8 @@ class Fortuna:
             py.draw.circle(self.ventana, self.ocupado, (453, 75), 35)
             py.draw.circle(self.ventana, self.ocupado, (596, 145), 35)
             py.draw.circle(self.ventana, self.ocupado, (600, 340), 35)
-        elif opcion == 5:
-            py.draw.circle(self.ventana, self.ocupado, (310, 360), 35)
-            py.draw.circle(self.ventana, self.ocupado, (300, 155), 35)
-            py.draw.circle(self.ventana, self.ocupado, (453, 75), 35)
-            py.draw.circle(self.ventana, self.ocupado, (596, 145), 35)
-            py.draw.circle(self.ventana, self.ocupado, (600, 340), 35)
             py.draw.circle(self.ventana, self.ocupado, (450, 420), 35)
-
+    
 
 asientosL = [1, 1, 1, 1, 1, 1]
 ocupados = []
@@ -92,29 +87,27 @@ class Situacion(threading.Thread):
         self.num_Personas = num_Personas
 
     def run(self):
-        print(" + Persona ", self.num_Personas, "Sube al Juego")
+        print(" PERSONA NUMERO (", self.num_Personas, ") SUBE AL JUEGO")
         self.asientos[self.num_Personas].acquire()
         ocupados.append(self.num_Personas)
-        print(ocupados)
         if len(ocupados) == 6:
-            for _ in range(6):
-                print("---Girando---")
+            for _ in range(random.randint(5,10)):
+                print(" --- G I R A N D O ---")
                 self.asientos[self.num_Personas].release()
                 time.sleep(2)
 
             for person in ocupados:
-                print("Persona ", person, "Bajando del juego")
+                print(" PERSONA NUMERO (", person, ") ESTA BAJANDO DEL JUEGO")
                 self.asientos[self.num_Personas].acquire()
                 time.sleep(2)
         
             for person in range(len(asientosL)):
-                print("Lugar ", person, "Libre")
+                print(" LUGAR NUMERO (", person, ") ESTA LIBRE ")
                 self.asientos[self.num_Personas].release()
                 time.sleep(2)
             
             ocupados.clear()
             
-
 def main():
     ventana = py.display.set_mode((800, 500))
     ventana.fill((202, 240, 248))
@@ -122,7 +115,6 @@ def main():
     ruedas = Fortuna(ventana)
     # botones
     boton1 = py.Rect(45, 200, 100, 40)
-    ocupado = (10, 138, 161)
     run = True
     contador = (0-1)
     while run:
